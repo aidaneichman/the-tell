@@ -15,6 +15,8 @@ g = G[G.season == 2025]; put("guessGain", f"{100*g.gain.mean():.1f}")
 gt = g[g.n >= 1500].nlargest(1, "gain").iloc[0]; put("guessTopName", gt["name"].split(", ")[1] + " " + gt["name"].split(",")[0]); put("guessTopGain", f"{100*gt.gain:.0f}")
 h = H["2025H1_2025H2"]; put("hoIn", f"{100*h['d_in']:.0f}"); put("hoOut", f"{100*h['d_out']:.0f}"); put("hoSign", f"{100*h['same_sign']:.0f}")
 put("hoNet", f"{100*h['net_out']:.0f}"); put("hoNetSign", f"{100*h['net_same_sign']:.0f}"); put("hoN", f"{h['n']}")
+put("hoOutLo", f"{100*h['d_out_lo']:.0f}"); put("hoOutHi", f"{100*h['d_out_hi']:.0f}")
+put("hoRep", f"{100*h['d_out_repeat']:.0f}"); put("hoOther", f"{100*h['d_out_other']:.0f}")
 put("tabIn", f"{TB.d25.abs().mean():.0f}"); put("tabOut", f"{(TB.d26*np.sign(TB.d25)).mean():.0f}"); put("tabKept", f"{int(TB.kept.sum())}"); put("tabN", f"{len(TB)}")
 put("relHalf", f"{R['split_indep_2025']['sb']:.2f}"); put("yoyTell", f"{R['yoy_tell_2025_2026']['r']:.2f}"); put("yoyCount", f"{R['yoy_count_2025_2026']['r']:.2f}")
 sp = C["span"]

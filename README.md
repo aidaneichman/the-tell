@@ -40,6 +40,12 @@ python snapshot.py data/pitches_full.csv
 
 Statcast redefined `sz_top`/`sz_bot` in 2026, so the zone analysis uses absolute feet.
 
+## License
+
+Code is MIT-licensed (see `LICENSE`). The Statcast snapshots in `data/` are MLB Advanced Media data,
+redistributed as published on Baseball Savant for research reproducibility and subject to MLB's terms of use;
+the MIT license does not cover them.
+
 ## Pipeline
 
 Each file in `out/` is written by exactly one script.
@@ -71,6 +77,7 @@ Each file in `out/` is written by exactly one script.
 | hand, count, previous pitch (millibits, 2025 mean over pitcher-seasons) | 102, 58, 12.8 | `out/tell.csv` `hand`, `count`, `tell` |
 | guess accuracy gain; top pitcher | 0.8 pts; Dylan Cease 7 | `out/guess.csv` (2025; top among 1,500+ pitches) |
 | top cue found, held out, net of league, same direction | 26, 10, 7, 78% | `out/tells_holdout.json["2025H1_2025H2"]` |
+| held-out 95% CI (pitcher bootstrap); repeat vs other cues | 7–13; 14, 8 | `out/tells_holdout.json["2025H1_2025H2"]` (`d_out_lo/hi`, `d_out_repeat/other`) |
 | Table 1 mean size found, held out | 44, 29 | `out/table_tells.csv` |
 | split-half reliability; year-to-year r; count usage | 0.75; 0.22; 0.62 | `out/reliability.json` `split_indep_2025.sb`, `yoy_tell_2025_2026`, `yoy_count_2025_2026` |
 | whiffs, runs per 100 pitches (10th to 90th percentile) | 1.1 (t 6.8); 0.26 (t 4.7) | `out/cost.json` `base`, scaled by `span` |

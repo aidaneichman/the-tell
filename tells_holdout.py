@@ -33,8 +33,13 @@ for name, A, B in (("2025H1_2025H2", (df.season == 2025) & (df.game_date < "2025
     top["league"] = np.where(lw[:, 1] > 0, lw[:, 0] / np.maximum(lw[:, 1], 1), np.nan)
     sg = np.sign(top.d); kept = top.d_out * sg; net = (top.d_out - top.league) * sg
     rep = top.prev == top.typ
+    rng = np.random.default_rng(7); kv = kept.to_numpy(); nv = net.to_numpy()
+    Bi = rng.integers(0, len(kv), size=(2000, len(kv)))                       # pitcher-level bootstrap of the held-out means
+    ci_out = np.percentile(kv[Bi].mean(1), [2.5, 97.5]); ci_net = np.percentile(np.nanmean(nv[Bi], 1), [2.5, 97.5])
     out[name] = dict(n=len(top), d_in=float(top.d.abs().mean()), d_out=float(kept.mean()), same_sign=float((kept > 0).mean()),
+                     d_out_lo=float(ci_out[0]), d_out_hi=float(ci_out[1]),
                      net_out=float(net.mean()), net_same_sign=float((net > 0).mean()), league_mean=float((top.league * sg).mean()),
+                     net_out_lo=float(ci_net[0]), net_out_hi=float(ci_net[1]),
                      d_out_repeat=float(kept[rep & (top.d > 0)].mean()), d_out_other=float(kept[~(rep & (top.d > 0))].mean()))
     top["name"] = top.pitcher.map(df.groupby("pitcher").player_name.first())
     top.to_csv(f"out/tells_{name}.csv", index=False); print(name, {k: round(v, 3) for k, v in out[name].items()})
