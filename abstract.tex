@@ -7,38 +7,38 @@
 {\large\bfseries The Tell: Which Pitch-Sequencing Giveaways Survive New Games}
 
 \textbf{Introduction.} Advance scouts sell sequencing tells (``after a slider he doubles up''), and
-clubs act on them. Nothing public separates real tells from patterns found by searching. We ask how much the previous pitch gives away beyond count and
+clubs act on them. Nothing public separates real tells from search artifacts. We ask how much the previous pitch gives away beyond count and
 batter hand, how much of a scouted tell survives into new games, whether predictability costs
-pitchers, and whether the 2026 automated ball-strike (ABS) challenge system changed it.
+pitchers, and whether it changed in 2026, the first automated ball-strike (ABS) challenge season.
 
 \textbf{Methods.} All \nPitches{} Statcast pitches, 2024--2026 (\nPS{} pitcher-seasons
-with \minN+ pitches). Nested models predict pitch type from batter hand, then count, then the
-previous pitch, scored on unseen games. TELL is the previous-pitch gain per pitcher-season, over
+with \minN+ pitches). Nested models predict pitch type from batter hand, then count, then
+previous pitch, on unseen games. TELL is the previous-pitch gain per pitcher-season, over
 pitches after a plate appearance's first. A cue is the count, hand and previous pitch that most
 shifts one pitch type's share. Each pitcher's top cue is found in April--June (or 2025) and scored
-only on later games, also net of the league-wide shift. Outcome regressions fix pitcher-season,
-pitch type $\times$ count $\times$ hand, and velocity. An in-season alarm multiplies game-by-game
-permutation e-values within count and batter hand. ABS effects use paired pitchers, 2024--25 as
-comparison.
+only on later games, and net of the league. Outcome regressions fix pitcher-season,
+pitch type $\times$ count $\times$ hand and velocity; a second adds the previous pitch's result. An in-season alarm multiplies game-by-game
+permutation e-values within count and batter hand. 2025--26 changes are compared with 2024--25; TELL changes
+use pitchers seen in both years.
 
 \textbf{Results.}
 \begin{itemize}\setlength{\itemsep}{0.05em}\setlength{\topsep}{0.1em}
-\item Added in that order, hand and count carry \mbHand{} and \mbCount{} millibits; the previous
+\item In order, hand and count carry \mbHand{} and \mbCount{} millibits; the previous
 pitch adds \mbTell. Guessing the likeliest pitch, a hitter gains \guessGain{} points of accuracy,
 \guessTopGain{} against \guessTopName.
-\item Selection inflates tells. The top April--June cue shifts the next-pitch share by \hoIn{} points
-when found and \hoOut{} on July--September games (\hoNet{} net of the league), same direction
-\hoSign\% (no tell: 0, 50\%; Figure~1B).
+\item The top April--June cue shifts the next-pitch share by \hoIn{} points
+when found and \hoOut{} on July--September games (\hoSign\% same direction; no tell: 0, 50\%). Net of
+the league, \hoNet{} points (\hoNetSign\%; Figure~1B).
 \item The \tabN{} largest 2025 cues all kept direction in 2026, shrinking \tabIn{} to
 \tabOut{} points (Table~1).
 \item TELL's within-season split-half reliability is \relHalf; across seasons, $r = \yoyTell$
 (count usage \yoyCount).
 \item Predictability is not associated with worse outcomes. From its 10th to 90th percentile,
 whiffs rise \effWhiff{} points ($t = \tWhiff$) and pitchers save \effRv{} more runs per 100 pitches
-($t = \tRv$), also with the prior pitch's result controlled.
+($t = \tRv$); controlling the previous pitch's result, \effWhiffPo{} and \effRvPo.
 \item The alarm fired for \almFire\% of 2025 pitchers (median \almMed{} pitches), \almCtrl\% of
-cue-free controls, and \almSim\% of simulations where the count responds to each pitch (Figure~1C).
-\item In 2026, the first ABS-challenge season, the called zone's top was \topAbs{} inches lower
+cue-free controls, and \almSim\% of simulations with the count responding to pitches (Figure~1C).
+\item In 2026 the called zone's top was \topAbs{} inches lower
 (2024$\to$25: \topPlac); TELL changed \tellAbsDiff{} millibits (95\% CI \tellAbsLo{} to
 \tellAbsHi; 2024$\to$25: \tellPlacDiff). The zone moved; sequencing did not.
 \end{itemize}
@@ -49,13 +49,13 @@ on held-out games, discount them, and track them with the alarm.
 Data and code: \mbox{github.com/aidaneichman/the-tell}.
 
 \begin{table}[h]\centering\small
-\caption*{\textbf{Table 1.} Top 2025 cues (50+ pitches; 25+ in 2026). Shift = share of the pitch after
-the cue minus after other previous pitches, same count and hand (points).}
+\caption*{\textbf{Table 1.} Top 2025 cues (50+ pitches; 25+ in 2026). Shift: share of the pitch after
+the cue minus after other previous pitches, same count and hand.}
 \vspace{-0.4em}
 \input{table_tells.tex}\end{table}
 
 \begin{figure}[h]\centering\includegraphics[width=\textwidth]{fig_abstract.pdf}
-\caption*{\textbf{Figure 1.} (A) Cue found Apr--Jun 2025, held out Jul--Sep. (B) Top Apr--Jun cues (30+
-pitches each way), re-scored Jul--Sep (10+).}
+\caption*{\textbf{Figure 1.} (A) Apr--Jun 2025 vs Jul--Sep. (B) Top Apr--Jun cues (30+
+pitches each way), re-scored Jul--Sep (10+). (C) Alarm paths; faded after firing.}
 \end{figure}
 \end{document}
