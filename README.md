@@ -1,7 +1,7 @@
 # The Tell
 
 What a pitcher's previous pitch gives away about the next one, measured out of sample, re-scored on
-new games, and monitored in season with a false-alarm guarantee. MLB Statcast, 2024 to 2026.
+new games, and monitored in season with a controlled false-alarm rate. MLB Statcast, 2024 to 2026.
 
 Submitted to the MIT Sloan Sports Analytics Conference 2027 research paper competition (baseball).
 
