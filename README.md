@@ -18,7 +18,8 @@ python tells_holdout.py         # concrete tells: select on one window, score on
 python guess.py                 # hitter guess accuracy
 python table_tells.py           # Table 1
 python cost.py                  # whiff, run value and xwOBA regressions with two-way fixed effects
-python monitor.py               # in-season game-block e-process alarm
+python monitor.py               # original whole-outing alarm (reads count structure; kept for the audit)
+python monitor2.py              # stratified alarm (within count x hand, within-PA pairs) + count-only negative control
 python abs_zone.py              # ABS called-zone change, 2024-25 placebo
 python fig_abstract.py          # Figure 1
 ```

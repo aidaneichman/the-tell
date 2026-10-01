@@ -1,0 +1,9 @@
+{
+ "orig_real_fired": 0.23411371237458195,
+ "strat_real_fired": 0.2491638795986622,
+ "orig_ctrl_fired": 0.1454849498327759,
+ "strat_ctrl_fired": 0.011705685618729096,
+ "orig_real_median_pitches": 325.0,
+ "strat_real_median_pitches": 436.0,
+ "n": 598
+}

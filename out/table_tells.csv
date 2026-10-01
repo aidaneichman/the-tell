@@ -1,11 +1,11 @@
-pitcher,situation,next,s25,s26,n26,kept
-Dylan Lee,"0-1 vs RHB, after slider",slider,75 vs 9,69 vs 25,62,True
-Jack Leiter,"1-2 vs LHB, after 4-seam",4-seam,22 vs 68,33 vs 50,39,True
-Kevin Gausman,"0-2 vs LHB, after 4-seam",4-seam,60 vs 15,51 vs 26,74,True
-Chris Sale,"0-1 vs RHB, after slider",4-seam,22 vs 66,30 vs 55,111,True
-Gregory Soto,"0-1 vs RHB, after sinker",sinker,62 vs 19,46 vs 24,48,True
-Matthew Boyd,"2-2 vs RHB, after change",4-seam,71 vs 30,56 vs 28,54,True
-Hunter Brown,"0-1 vs RHB, after sinker",sinker,62 vs 22,64 vs 28,50,True
-Kris Bubic,"1-0 vs RHB, after 4-seam",4-seam,54 vs 16,67 vs 24,36,True
-Drew Rasmussen,"1-2 vs LHB, after cutter",cutter,7 vs 45,4 vs 30,51,True
-Dustin May,"1-2 vs LHB, after sweeper",sweeper,31 vs 68,19 vs 42,31,True
+pitcher,situation,next,d25,d26,n26,kept
+Dylan Lee,"0-1 vs RHB, after slider",slider,66,44,62,True
+Jack Leiter,"1-2 vs LHB, after 4-seam",4-seam,-46,-17,39,True
+Kevin Gausman,"0-2 vs LHB, after 4-seam",4-seam,45,25,74,True
+Chris Sale,"0-1 vs RHB, after slider",4-seam,-44,-25,111,True
+Gregory Soto,"0-1 vs RHB, after sinker",sinker,43,22,48,True
+Matthew Boyd,"2-2 vs RHB, after change",4-seam,41,28,54,True
+Hunter Brown,"0-1 vs RHB, after sinker",sinker,40,36,50,True
+Kris Bubic,"1-0 vs RHB, after 4-seam",4-seam,38,43,36,True
+Drew Rasmussen,"1-2 vs LHB, after cutter",cutter,-38,-26,51,True
+Dustin May,"1-2 vs LHB, after sweeper",sweeper,-37,-23,31,True
