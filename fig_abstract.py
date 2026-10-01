@@ -38,7 +38,7 @@ a.set_xlim(0, 1); a.set_ylim(-0.1, 5.3); a.set_yticks([]); a.spines["left"].set_
 a.set_xticks([0, .5, 1]); a.set_xticklabels(["0", "50%", "100%"])
 a.legend(handles=[Patch(color=TYPE_COL[k], label=l) for k, l in (("SL", "slider"), ("FF", "4-seam"), ("CU", "curve"), ("other", "other"))],
          ncol=4, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.13), handlelength=0.9, columnspacing=0.9, handletextpad=0.35)
-head(fig, L, TOP, "A", "One tell: Yusei Kikuchi, 1–0 count, right-handed batter")
+head(fig, L, TOP, "A", "One cue: Yusei Kikuchi, 1–0 count, right-handed batter")
 
 # ---- B: every pitcher's biggest tell, chosen in H1, scored in H2
 t = pd.read_csv("out/tells_2025H1_2025H2.csv"); sg = np.sign(t.d)
@@ -46,16 +46,16 @@ xin = 100 * t.d.abs(); xout = 100 * t.d_out * sg; rep = (t.prev == t.typ) & (t.d
 b = fig.add_axes([0.605, 0.60, 0.385, 0.30])
 b.axhline(0, color=GRY, lw=0.6); b.plot([10, 70], [10, 70], color=GRY, lw=0.7, ls="--")
 b.text(52, 47, "held out = selected", fontsize=6.2, color=GRY, rotation=31, ha="center", va="bottom")
-b.scatter(xin[~rep], xout[~rep], s=11, color=GRY, alpha=0.7, lw=0, label="other tells")
+b.scatter(xin[~rep], xout[~rep], s=11, color=GRY, alpha=0.7, lw=0, label="other cues")
 b.scatter(xin[rep], xout[rep], s=13, color=ACC, alpha=0.9, lw=0, label="doubling up")
 k = t.name == "Kikuchi, Yusei"
 b.scatter(xin[k], xout[k], s=40, facecolor="none", edgecolor=INK, lw=0.9); b.annotate("Kikuchi", (xin[k].iloc[0], xout[k].iloc[0]), xytext=(6, 2), textcoords="offset points", fontsize=6.6)
 b.axhline(xout.mean(), color=RED, lw=1.0)
 b.text(69, -31, f"selected {xin.mean():.0f} pts, held out {xout.mean():.0f} pts\nsame direction {100*(xout>0).mean():.0f}%", color=RED, fontsize=6.5, ha="right", va="bottom")
 b.set_xlim(10, 70); b.set_ylim(-35, 65)
-b.set_xlabel("shift in next-pitch share, Apr–Jun (points)"); b.set_ylabel("same tell, Jul–Sep (points)")
+b.set_xlabel("shift in next-pitch share, Apr–Jun (points)"); b.set_ylabel("same cue, Jul–Sep (points)")
 b.legend(frameon=True, framealpha=0.9, edgecolor="none", loc="upper left", handletextpad=0.2, borderaxespad=0.1)
-head(fig, R2, TOP, "B", f"Each pitcher's biggest tell, re-scored on new games (n = {len(t)})")
+head(fig, R2, TOP, "B", f"Each pitcher's top cue, re-scored on new games (n = {len(t)})")
 
 # ---- C: predictability is not punished
 from cost_bins import binned
@@ -66,7 +66,7 @@ c.errorbar(w.x, 100 * w.y, yerr=196 * w.se, fmt="o", color=INK, ms=3, capsize=0,
 bt = C["whiff_given_swing"]["beta"][0]; xs = np.linspace(w.x.min(), w.x.max(), 10)
 c.plot(xs, 100 * bt * xs, color=ACC, lw=1.4)
 c.set_xlabel("how much the previous pitch gave this pitch away (bits)"); c.set_ylabel("whiff rate on swings, relative (pp)")
-head(fig, L, BOT, "C", "Hitters do not cash in: predictable pitches miss more bats")
+head(fig, L, BOT, "C", "Predictable pitches are not punished")
 c.text(0.98, 0.05, f"{100*bt:+.1f} pp per bit, t = {bt/C['whiff_given_swing']['se'][0]:+.1f}\nn = {C['whiff_given_swing']['n']:,} swings, 2025–26\npitcher-season and type×count FE",
        transform=c.transAxes, ha="right", fontsize=6.3, color=INK)
 
