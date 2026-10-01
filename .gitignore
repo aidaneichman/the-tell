@@ -1,0 +1,10 @@
+data/
+out/pitch_probs.csv
+out/cost_bins.pkl
+out/zone_maps.npy
+__pycache__/
+*.log
+*.aux
+abstract_v1.tex
+paper.tex
+paper.pdf
