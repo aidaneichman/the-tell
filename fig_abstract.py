@@ -57,7 +57,7 @@ b.set_xlabel("shift when found, Apr–Jun (points)"); b.set_ylabel("same cue, he
 head(0.535, 0.955, "B", f"Every pitcher's top cue, held out (n = {len(t)})",
      f"found {xin.mean():.0f} pts, held out {xout.mean():.0f}; same sign {100*(xout>0).mean():.0f}% (no tell: 0, 50%)")
 
-# ---- D: stratified alarm
+# ---- C: stratified alarm
 M = pd.read_csv("out/monitor_audit_2025.csv"); P = json.load(open("out/monitor_audit_paths.json")); S = json.load(open("out/monitor_audit.json")); SIM = json.load(open("out/monitor_sim.json"))
 e = fig.add_axes([0.085, 0.075, 0.895, 0.33])
 for nm, col in (("Brown, Hunter", ACC), ("Sale, Chris", ACC2), ("Skubal, Tarik", GRY)):
@@ -77,4 +77,4 @@ e.set_ylabel("evidence against no-cue null\n(log10 e-value)"); e.legend(frameon=
 e.text(0.995, 0.21, f"Fired for {100*S['strat_real_fired']:.0f}% of 2025 pitchers (median {S['strat_real_median_pitches']:.0f} pitches)\n"
        f"{100*S['strat_ctrl_fired']:.0f}% of cue-free controls, {100*SIM['rate']:.1f}% of endogenous-count simulations", transform=e.transAxes, ha="right", va="bottom", fontsize=8.5, color=INK)
 head(0.0, 0.47, "C", "An in-season alarm", "permutes pitch order within count and batter hand, game by game")
-fig.savefig("fig_abstract.pdf", bbox_inches="tight"); fig.savefig("fig_abstract.png", dpi=300, bbox_inches="tight")
+fig.savefig("fig_abstract.pdf", bbox_inches="tight", metadata={"CreationDate": None}); fig.savefig("fig_abstract.png", dpi=300, bbox_inches="tight")

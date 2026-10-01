@@ -4,6 +4,8 @@ What a pitcher's previous pitch gives away about the next one: measured out of s
 new games, and monitored in season. MLB Statcast, 2024 to 2026. Submitted to the MIT Sloan Sports
 Analytics Conference 2027 research paper competition (baseball track).
 
+The abstract as submitted on 1 October 2026 is tag `ssac27-abstract`. Later commits may rebuild the analysis for the full paper.
+
 ## Reproduce
 
 ```
@@ -46,7 +48,7 @@ Each file in `out/` is written by exactly one script.
 |---|---|---|
 | `common.py` | | loads the snapshot; eight pitch classes; previous pitch within the plate appearance (8 = first pitch) |
 | `model.py` | | nested hierarchical Dirichlet ladder: hand, count, previous pitch; leave-one-game-out. First pitches get no previous-pitch rung |
-| `tune.py` | `out/hp.json` | smoothing tuned on 2024 only |
+| `tune.py` | `out/hp.json` | smoothing: a0, a1, a2 fixed (2, 20, 20); b3, a3, b4 tuned on 2024 only |
 | `tell.py` | `out/tell.csv`, `out/pitch_probs.csv` | TELL per pitcher-season (previous-pitch gain over pitches after the first of a PA) |
 | `reliability.py` | `out/reliability.json`, `out/splithalf_indep.csv`, `out/tell_eb.csv` | independent split-half (refit on odd and on even games), year-to-year r, empirical Bayes |
 | `extra.py` | `out/extra.json` | paired season-to-season change in TELL |
