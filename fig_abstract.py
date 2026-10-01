@@ -38,7 +38,7 @@ a.set_xlim(0, 1); a.set_ylim(-0.25, 5.35); a.set_yticks([]); a.spines["left"].se
 a.set_xticks([0, .5, 1]); a.set_xticklabels(["0", "50", "100%"])
 a.legend(handles=[Patch(color=TYPE_COL[k], label=l) for k, l in (("SL", "slider"), ("FF", "4-seam"), ("CU", "curve"), ("other", "other"))],
          ncol=4, frameon=False, loc="upper center", bbox_to_anchor=(0.32, -0.11), handlelength=0.9, columnspacing=0.8, handletextpad=0.3)
-head(0.0, 0.955, "A", "One cue: Kikuchi, 1–0, right-handed batter", "share of next pitches that are sliders, by what came before")
+head(0.0, 0.955, "A", "One cue: Yusei Kikuchi, 2025, 1–0 count vs RHB", "next-pitch mix after a slider vs after anything else")
 
 # ---- B: every pitcher's top cue, found Apr-Jun, scored Jul-Sep
 t = pd.read_csv("out/tells_2025H1_2025H2.csv"); sg = np.sign(t.d); xin = 100 * t.d.abs(); xout = 100 * t.d_out * sg
@@ -71,10 +71,10 @@ for nm, col in (("Brown, Hunter", ACC), ("Sale, Chris", ACC2), ("Skubal, Tarik",
     else:
         e.plot(dd, y, color=col, lw=1.8, label=f"{first}: never fired")
 e.axhline(np.log10(20), color=RED, lw=1.0, ls="--")
-e.text(pd.Timestamp("2025-09-29"), np.log10(20) + 0.25, "alarm: E = 20 (5% false-alarm bound)", color=RED, fontsize=8.5, ha="right", va="bottom")
+e.text(pd.Timestamp("2025-09-29"), np.log10(20) + 0.25, "alarm: E = 20 (5% false-alarm level)", color=RED, fontsize=8.5, ha="right", va="bottom")
 e.xaxis.set_major_locator(mdates.MonthLocator()); e.xaxis.set_major_formatter(mdates.DateFormatter("%b"))
 e.set_ylabel("evidence against no-cue null\n(log10 e-value)"); e.legend(frameon=False, loc="upper left")
 e.text(0.995, 0.21, f"Fired for {100*S['strat_real_fired']:.0f}% of 2025 pitchers (median {S['strat_real_median_pitches']:.0f} pitches)\n"
        f"and {100*S['strat_ctrl_fired']:.0f}% of count-only shuffled controls", transform=e.transAxes, ha="right", va="bottom", fontsize=8.5, color=INK)
-head(0.0, 0.47, "C", "An in-season alarm: pitch order within count and batter hand, game by game")
+head(0.0, 0.47, "C", "An in-season alarm with a 5% false-alarm level", "permutes pitch order within count and batter hand, game by game")
 fig.savefig("fig_abstract.pdf", bbox_inches="tight"); fig.savefig("fig_abstract.png", dpi=300, bbox_inches="tight")

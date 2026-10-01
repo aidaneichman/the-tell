@@ -12,7 +12,7 @@ the previous pitch gives away beyond count and batter hand, how much of a scoute
 new games, whether hitters punish it, and whether the 2026 automated ball-strike (ABS) system
 changed it.
 
-\textbf{Methods.} We use all 2,049,352 regular-season Statcast pitches from 2024--2026 (1,793
+\textbf{Methods.} All 2,049,352 regular-season Statcast pitches from 2024--2026 (1,793
 pitcher-seasons with 250+ pitches). For each pitcher-season, nested models predict pitch type from
 batter hand, then count, then the previous pitch, scored on games they never saw. The gain from the
 previous pitch is TELL. A cue is the count, hand and previous pitch that most shifts one pitch
@@ -25,31 +25,31 @@ permutation e-values within count and batter hand. ABS is tested on paired pitch
 \textbf{Results.}
 \begin{itemize}\setlength{\itemsep}{0.05em}\setlength{\topsep}{0.1em}
 \item Added in that order, batter hand and count carry 102 and 58 millibits about the next pitch;
-the previous pitch adds 8.1. A hitter guessing the likeliest pitch gains 0.6 points of accuracy on
-average, and 5 against Dylan Cease.
-\item Selection inflates tells. The top April--June cue shifts the next pitch by 26 points when found
+the previous pitch adds 8.1. Guessing the likeliest pitch, a hitter gains 0.6 points of accuracy,
+and 5 against Dylan Cease.
+\item Selection inflates tells. The top April--June cue shifts the next-pitch share by 26 points when found
 and 10 on July--September games, in the same direction 78\% of the time (no tell: 0 points,
-50\%; Figure 1B). Across seasons: 28 to 13.
+50\%; Figure 1B).
 \item The ten largest 2025 cues all kept their direction in 2026, shrinking from 44 to 29 points
 (Table~1).
-\item TELL is stable within a season (odd versus even games, 0.73), not across seasons
+\item TELL is stable within a season (odd-even reliability 0.73), not across seasons
 ($r = 0.19$; count usage 0.62).
 \item Predictable pitches are not punished. From the 10th to the 90th percentile of predictability,
-whiffs rise 0.6 points ($t = 4.7$) and run value improves 0.23 runs per 100 pitches ($t = 5.3$).
+whiffs rise 0.6 points ($t = 4.7$) and pitchers save 0.23 more runs per 100 pitches ($t = 5.3$).
 \item The alarm fired for 25\% of 2025 pitchers, at a median of 436 pitches, and for 1\% of
-controls with cues shuffled away (Figure 1C).
+cue-free controls (Figure 1C).
 \item ABS lowered the top of the called zone by 1.2 inches (placebo 0.2) but moved TELL by
 $-0.04$ millibits (95\% CI $-1.47$ to $+1.39$; placebo $-0.25$). The zone moved; sequencing did not.
 \end{itemize}
 
-\textbf{Conclusion.} Sequencing tells are real, season-specific, and far smaller in new games than when
-found. Scouts should discount them accordingly. Hitters show no sign of exploiting
-them. The alarm flags cues in season with a controlled false-alarm rate.
-Code: \mbox{github.com/aidaneichman/the-tell}.
+\textbf{Conclusion.} Sequencing tells are real but shrink by a third to two-thirds when held out,
+and a pitcher's overall predictability is not a year-to-year trait. Scouts should discount tells
+accordingly. Hitters show no sign of exploiting them. The alarm flags cues in season with a
+controlled false-alarm rate. Code: \mbox{github.com/aidaneichman/the-tell}.
 
 \begin{table}[h]\centering\small
-\caption*{\textbf{Table 1.} Largest 2025 cues (50+ pitches; 25+ in 2026), held out on 2026. Shift in next-pitch
-share after the cue (points).}
+\caption*{\textbf{Table 1.} Largest 2025 cues (50+ pitches; 25+ in 2026), held out on 2026. Next-pitch share shift after
+the cue (points).}
 \vspace{-0.4em}
 \begin{tabular}{@{}lllccc@{}}\toprule
 Pitcher & Situation & Next pitch & Found 2025 & Held out 2026 & $n$ 2026 \\\midrule

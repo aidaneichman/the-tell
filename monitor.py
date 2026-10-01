@@ -1,4 +1,6 @@
-"""The in-season monitor: game-block permutation e-process (valid under within-game exchangeability), 2025."""
+"""SUPERSEDED by monitor2.py. This original alarm permutes whole outings, so its null is "pitch types are
+exchangeable within a game". Count structure alone violates that null (it fires for 15% of count-only
+shuffled controls). The abstract and paper use the stratified alarm in monitor2.py. Kept for the audit."""
 import numpy as np, pandas as pd, json, sys
 from eprocess import game_eprocess
 from common import load
