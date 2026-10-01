@@ -19,5 +19,5 @@ step "alarm, endogenous count"     monitor_sim.py
 step "called zone, absolute feet"  abs_zone.py
 step "numbers.tex"                 mknumbers.py
 step "Figure 1"                    fig_abstract.py
-if command -v tectonic >/dev/null; then SOURCE_DATE_EPOCH=1790000000 tectonic -X compile -Z deterministic-mode abstract.tex; else echo "tectonic not found: compile abstract.tex with any LaTeX engine"; fi
+if command -v tectonic >/dev/null; then SOURCE_DATE_EPOCH=1790812800 tectonic -X compile -Z deterministic-mode abstract.tex; else echo "tectonic not found: compile abstract.tex with any LaTeX engine"; fi
 echo "done"

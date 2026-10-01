@@ -8,28 +8,26 @@
 
 \textbf{Introduction.} Advance reports flag sequencing tells (``after a slider he doubles up''), and
 clubs act on them. Public sequencing work has not tested whether pitcher-specific cues survive new games. We ask how much the previous pitch gives away beyond count and
-batter hand, how much of that survives, whether predictability costs
+batter hand, how much cues survive, whether predictability costs
 pitchers, and whether it changed in 2026, the first automated ball-strike (ABS) challenge season.
 
 \textbf{Methods.} \nPitches{} Statcast pitches, 2024--2026 (\nPS{} pitcher-seasons
 with \minN+ pitches). Nested models predict pitch type from batter hand, then count, then
 previous pitch, on unseen games. TELL is the previous-pitch gain per pitcher-season, over
 pitches after a plate appearance's first. A cue is the count, hand and previous pitch that most
-shifts one pitch type's share. Each pitcher's top cue is found in April--June (or 2025), scored only on later games, and also net of the league. Outcome regressions fix pitcher-season,
-pitch type $\times$ count $\times$ hand and velocity; a second adds the previous pitch's result. An in-season alarm multiplies game-by-game
-permutation e-values within count and batter hand. 2025--26 changes are compared with 2024--25, pairing
-pitchers for TELL.
+shifts one pitch type's share. Each pitcher's top cue is found in April--June (or 2025), scored only on later games, and also net of the league. Outcome regressions fix pitcher-season and pitch type $\times$ count $\times$ hand, controlling velocity; a second adds the previous pitch's result. An in-season alarm multiplies game-by-game
+permutation e-values within count and batter hand. 2025--26 changes are compared with 2024--25, with TELL paired by pitcher.
 
 \textbf{Results.}
 \begin{itemize}\setlength{\itemsep}{0.05em}\setlength{\topsep}{0.1em}
-\item In order, hand and count carry \mbHand{} and \mbCount{} millibits; the previous
+\item In 2025, hand and count carry \mbHand{} and \mbCount{} millibits; the previous
 pitch adds \mbTell. Using the previous pitch, guessing the likeliest pitch is right \guessGain{} points more often, \guessTopGain{} against \guessTopName.
 \item The top April--June cue shifts the next-pitch share by \hoIn{} points
 when found and \hoOut{} on July--September games (\hoSign\% same direction; no tell: 0, 50\%; Figure~1B). Net of the league, \hoNet{} points (\hoNetSign\%).
 \item The \tabN{} largest 2025 cues all kept direction in 2026, shrinking \tabIn{} to
 \tabOut{} points (Table~1).
 \item TELL's within-season split-half reliability is \relHalf; across seasons, $r = \yoyTell$
-(count usage \yoyCount).
+(count gain: \yoyCount).
 \item Pitch-level predictability is not associated with worse outcomes. Within pitcher-season, from its 10th to 90th percentile, whiffs per swing rise \effWhiff{} points ($t = \tWhiff$) and pitchers save \effRv{} more runs per 100 pitches
 ($t = \tRv$); controlling the previous pitch's result, \effWhiffPo{} and \effRvPo.
 \item The alarm fired for \almFire\% of 2025 pitchers (median \almMed{} pitches), \almCtrl\% of
