@@ -2,71 +2,60 @@
 \usepackage[margin=0.85in,top=0.75in]{geometry}\usepackage[T1]{fontenc}\usepackage{lmodern}\usepackage{graphicx}
 \usepackage{booktabs}\usepackage{amsmath}\usepackage[font=small,labelfont=bf]{caption}
 \setlength{\parindent}{0pt}\setlength{\parskip}{0.42em}\pagestyle{empty}
+\input{numbers}
 \begin{document}
-{\large\bfseries The Tell: Which Pitch-Sequencing Giveaways Survive New Games, and Whether Hitters Cash In}
+{\large\bfseries The Tell: Which Pitch-Sequencing Giveaways Survive New Games}
 
-\textbf{Introduction.} Advance scouts sell sequencing tells (``after a slider he doubles up''),
-and clubs act on them. No public method separates a real
-tell from one found by searching hundreds of pitchers, counts and previous pitches. We ask how much
-the previous pitch gives away beyond count and batter hand, how much of a scouted tell survives into
-new games, whether hitters punish it, and whether the 2026 automated ball-strike (ABS) system
-changed it.
+\textbf{Introduction.} Advance scouts sell sequencing tells (``after a slider he doubles up''), and
+clubs act on them. Nothing public separates real tells from patterns found by searching. We ask how much the previous pitch gives away beyond count and
+batter hand, how much of a scouted tell survives into new games, whether predictability costs
+pitchers, and whether the 2026 automated ball-strike (ABS) challenge system changed it.
 
-\textbf{Methods.} All 2,049,352 regular-season Statcast pitches from 2024--2026 (1,793
-pitcher-seasons with 250+ pitches). For each pitcher-season, nested models predict pitch type from
-batter hand, then count, then the previous pitch, scored on games they never saw. The gain from the
-previous pitch is TELL. A cue is the count, hand and previous pitch that most shifts one pitch
-type's share. We find each pitcher's top cue in April--June (or 2025) and score it only on later
-games. Whiff and run-value regressions on each pitch's out-of-sample predictability hold
-pitcher-season, pitch type, count and velocity fixed. An in-season alarm multiplies game-by-game
-permutation e-values within count and batter hand. ABS is tested on paired pitchers against a
-2024--25 placebo.
+\textbf{Methods.} All \nPitches{} Statcast pitches, 2024--2026 (\nPS{} pitcher-seasons
+with \minN+ pitches). Nested models predict pitch type from batter hand, then count, then the
+previous pitch, scored on unseen games. TELL is the previous-pitch gain per pitcher-season, over
+pitches after a plate appearance's first. A cue is the count, hand and previous pitch that most
+shifts one pitch type's share. Each pitcher's top cue is found in April--June (or 2025) and scored
+only on later games, also net of the league-wide shift. Outcome regressions fix pitcher-season,
+pitch type $\times$ count $\times$ hand, and velocity. An in-season alarm multiplies game-by-game
+permutation e-values within count and batter hand. ABS effects use paired pitchers, 2024--25 as
+comparison.
 
 \textbf{Results.}
 \begin{itemize}\setlength{\itemsep}{0.05em}\setlength{\topsep}{0.1em}
-\item Added in that order, batter hand and count carry 102 and 58 millibits about the next pitch;
-the previous pitch adds 8.1. Guessing the likeliest pitch, a hitter gains 0.6 points of accuracy,
-and 5 against Dylan Cease.
-\item Selection inflates tells. The top April--June cue shifts the next-pitch share by 26 points when found
-and 10 on July--September games, in the same direction 78\% of the time (no tell: 0 points,
-50\%; Figure 1B).
-\item The ten largest 2025 cues all kept their direction in 2026, shrinking from 44 to 29 points
-(Table~1).
-\item TELL is stable within a season (odd-even reliability 0.73), not across seasons
-($r = 0.19$; count usage 0.62).
-\item Predictable pitches are not punished. From the 10th to the 90th percentile of predictability,
-whiffs rise 0.6 points ($t = 4.7$) and pitchers save 0.23 more runs per 100 pitches ($t = 5.3$).
-\item The alarm fired for 25\% of 2025 pitchers, at a median of 436 pitches, and for 1\% of
-cue-free controls (Figure 1C).
-\item ABS lowered the top of the called zone by 1.2 inches (placebo 0.2) but moved TELL by
-$-0.04$ millibits (95\% CI $-1.47$ to $+1.39$; placebo $-0.25$). The zone moved; sequencing did not.
+\item Added in that order, hand and count carry \mbHand{} and \mbCount{} millibits; the previous
+pitch adds \mbTell. Guessing the likeliest pitch, a hitter gains \guessGain{} points of accuracy,
+\guessTopGain{} against \guessTopName.
+\item Selection inflates tells. The top April--June cue shifts the next-pitch share by \hoIn{} points
+when found and \hoOut{} on July--September games (\hoNet{} net of the league), same direction
+\hoSign\% (no tell: 0, 50\%; Figure~1B).
+\item The \tabN{} largest 2025 cues all kept direction in 2026, shrinking \tabIn{} to
+\tabOut{} points (Table~1).
+\item TELL's within-season split-half reliability is \relHalf; across seasons, $r = \yoyTell$
+(count usage \yoyCount).
+\item Predictability is not associated with worse outcomes. From its 10th to 90th percentile,
+whiffs rise \effWhiff{} points ($t = \tWhiff$) and pitchers save \effRv{} more runs per 100 pitches
+($t = \tRv$), also with the prior pitch's result controlled.
+\item The alarm fired for \almFire\% of 2025 pitchers (median \almMed{} pitches), \almCtrl\% of
+cue-free controls, and \almSim\% of simulations where the count responds to each pitch (Figure~1C).
+\item In 2026, the first ABS-challenge season, the called zone's top was \topAbs{} inches lower
+(2024$\to$25: \topPlac); TELL changed \tellAbsDiff{} millibits (95\% CI \tellAbsLo{} to
+\tellAbsHi; 2024$\to$25: \tellPlacDiff). The zone moved; sequencing did not.
 \end{itemize}
 
 \textbf{Conclusion.} Sequencing tells are real but shrink by a third to two-thirds when held out,
-and a pitcher's overall predictability is not a year-to-year trait. Scouts should discount tells
-accordingly. Hitters show no sign of exploiting them. The alarm flags cues in season with a
-controlled false-alarm rate. Code: \mbox{github.com/aidaneichman/the-tell}.
+and overall predictability is far less stable across seasons than within one. Clubs should validate cues
+on held-out games, discount them, and track them with the alarm.
+Data and code: \mbox{github.com/aidaneichman/the-tell}.
 
 \begin{table}[h]\centering\small
-\caption*{\textbf{Table 1.} Largest 2025 cues (50+ pitches; 25+ in 2026), held out on 2026. Next-pitch share shift after
-the cue (points).}
+\caption*{\textbf{Table 1.} Top 2025 cues (50+ pitches; 25+ in 2026). Shift = share of the pitch after
+the cue minus after other previous pitches, same count and hand (points).}
 \vspace{-0.4em}
-\begin{tabular}{@{}lllccc@{}}\toprule
-Pitcher & Situation & Next pitch & Found 2025 & Held out 2026 & $n$ 2026 \\\midrule
-Dylan Lee & 0-1 vs RHB, after slider & slider & $+66$ & $+44$ & 62 \\
-Jack Leiter & 1-2 vs LHB, after 4-seam & 4-seam & $-46$ & $-17$ & 39 \\
-Kevin Gausman & 0-2 vs LHB, after 4-seam & 4-seam & $+45$ & $+25$ & 74 \\
-Chris Sale & 0-1 vs RHB, after slider & 4-seam & $-44$ & $-25$ & 111 \\
-Gregory Soto & 0-1 vs RHB, after sinker & sinker & $+43$ & $+22$ & 48 \\
-Matthew Boyd & 2-2 vs RHB, after change & 4-seam & $+41$ & $+28$ & 54 \\
-Hunter Brown & 0-1 vs RHB, after sinker & sinker & $+40$ & $+36$ & 50 \\
-Kris Bubic & 1-0 vs RHB, after 4-seam & 4-seam & $+38$ & $+43$ & 36 \\
-Drew Rasmussen & 1-2 vs LHB, after cutter & cutter & $-38$ & $-26$ & 51 \\
-Dustin May & 1-2 vs LHB, after sweeper & sweeper & $-37$ & $-23$ & 31 \\
-\bottomrule
-\end{tabular}\end{table}
+\input{table_tells.tex}\end{table}
 
 \begin{figure}[h]\centering\includegraphics[width=\textwidth]{fig_abstract.pdf}
-\caption*{\textbf{Figure 1.} (B) Cues with 30+ pitches each way when found, 10+ held out.}
+\caption*{\textbf{Figure 1.} (A) Cue found Apr--Jun 2025, held out Jul--Sep. (B) Top Apr--Jun cues (30+
+pitches each way), re-scored Jul--Sep (10+).}
 \end{figure}
 \end{document}

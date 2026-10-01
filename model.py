@@ -23,6 +23,8 @@ def ladder(g, hp):
     pvz = logo_tables(pv * 3 + pz, x, gm, 27, G); pvonly = logo_tables(pv, x, gm, 9, G)
     tilt4 = blend(pvz, blend(pvonly, p0, hp["b3"]), hp["b4"]) / blend(pvonly, p0, hp["b3"])
     p4 = normalize(p3 * tilt4)
+    first = (pv == 8)[:, None]                                            # first pitch of a PA: no previous pitch, and the
+    p3 = np.where(first, p2, p3); p4 = np.where(first, p3, p4)            # count is 0-0, so state 8 would only re-encode the count
     P = np.stack([p0, p1, p2, p3, p4], 1)                                 # (n, 5, D)
     return P, x, gm, G
 HP = dict(a0=2.0, a1=20.0, a2=20.0, b3=30.0, a3=30.0, b4=30.0)

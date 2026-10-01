@@ -1,44 +1,41 @@
-"""Concrete tells, selected on one window and scored on a later one, so selection bias cannot inflate them.
-A tell is a (pitcher, count, previous pitch, next type) cell; its size is the shift in the next type's
-frequency against the same pitcher, count and batter hand after any other previous pitch."""
+"""Concrete cues, selected on one window and scored on a later one, so selection cannot inflate the score.
+A cue is a (pitcher, count, batter hand, previous pitch) situation; its size is the shift in one next-pitch type's
+share against the same pitcher, count and hand after any other previous pitch. Each pitcher's top cue (30+ pitches
+each way when found) is re-scored on the later window (10+ each way). League netting: the same shift computed for
+every other pitcher with that cue in the later window (10+ each way), averaged weighted by cue pitches, is
+subtracted, so a cue that only reflects a league-wide habit (everyone doubles up) scores zero.
+Writes out/tells_<window>.csv and out/tells_holdout.json."""
 import numpy as np, pandas as pd, json
-from common import load, NAME
+from common import load
 df = load(); df = df[df.prev < 8]
-def cells(d, mn):
-    out = []
-    for (pid, c, h), s in d.groupby(["pitcher", "count", "hand"]):
-        tot = np.bincount(s.x, minlength=8); ntot = len(s)
-        for pv, t in s.groupby("prev"):
-            n1 = len(t); n0 = ntot - n1
-            if n1 < mn or n0 < mn: continue
-            f1 = np.bincount(t.x, minlength=8) / n1; f0 = (tot - np.bincount(t.x, minlength=8)) / n0
-            k = np.argmax(np.abs(f1 - f0))
-            out.append((pid, c, h, pv, k, n1, f1[k], f0[k], f1[k] - f0[k]))
-    return pd.DataFrame(out, columns=["pitcher", "count", "hand", "prev", "typ", "n1", "f1", "f0", "d"])
-def score(d, sel):
-    r = []
-    for row in sel.itertuples():
-        s = d[(d.pitcher == row.pitcher) & (d["count"] == row.count) & (d.hand == row.hand)]
-        a = s[s.prev == row.prev]; b = s[s.prev != row.prev]
-        r.append(((a.x == row.typ).mean() - (b.x == row.typ).mean()) if len(a) >= 10 and len(b) >= 10 else np.nan)
-    return np.array(r)
+
+def shifts(d, mn):
+    """All (pitcher, count, hand, prev, typ) shifts f1 - f0 with n1, n0 >= mn."""
+    N = d.groupby(["pitcher", "count", "hand", "prev", "x"]).size().unstack("x", fill_value=0).reindex(columns=range(8), fill_value=0)
+    n1 = N.sum(axis=1); tot = N.groupby(level=[0, 1, 2]).transform("sum"); n0 = tot.sum(axis=1) - n1
+    f1 = N.div(n1, axis=0); f0 = (tot - N).div(n0.replace(0, np.nan), axis=0)
+    S = (f1 - f0).stack().rename("d").reset_index().rename(columns={"x": "typ"})
+    S["n1"] = n1.reindex(S.set_index(["pitcher", "count", "hand", "prev"]).index).to_numpy()
+    S["n0"] = n0.reindex(S.set_index(["pitcher", "count", "hand", "prev"]).index).to_numpy()
+    S["f1"] = f1.stack().to_numpy(); S["f0"] = f0.stack().to_numpy()
+    return S[(S.n1 >= mn) & (S.n0 >= mn)]
+
 out = {}
-for name, A, B in (("2025H1->2025H2", (df.season == 2025) & (df.game_date < "2025-07-01"), (df.season == 2025) & (df.game_date >= "2025-07-01")),
-                   ("2025->2026", df.season == 2025, df.season == 2026)):
-    a = df[A]; b = df[B]
-    C = cells(a, 30); top = C.loc[C.groupby("pitcher").d.apply(lambda s: s.abs().idxmax())]
-    top["d_out"] = score(b, top); top = top.dropna(subset=["d_out"])
-    same = np.sign(top.d) == np.sign(top.d_out)
-    out[name] = dict(n=len(top), d_in=float(top.d.abs().mean()), d_out=float((top.d_out * np.sign(top.d)).mean()),
-                     same_sign=float(same.mean()), half_kept=float(((top.d_out * np.sign(top.d)) >= top.d.abs() / 2).mean()))
-    top["name"] = [df.loc[df.pitcher == p, "player_name"].iloc[0] for p in top.pitcher]
-    top.to_csv(f"out/tells_{name.replace('>', '').replace('-', '_')}.csv", index=False)
-    print(name, out[name])
+for name, A, B in (("2025H1_2025H2", (df.season == 2025) & (df.game_date < "2025-07-01"), (df.season == 2025) & (df.game_date >= "2025-07-01")),
+                   ("2025_2026", df.season == 2025, df.season == 2026)):
+    Sa = shifts(df[A], 30); top = Sa.loc[Sa.groupby("pitcher").d.apply(lambda s: s.abs().idxmax())].reset_index(drop=True)
+    Sb = shifts(df[B], 10); key = ["count", "hand", "prev", "typ"]
+    top = top.merge(Sb[["pitcher"] + key + ["d"]].rename(columns={"d": "d_out"}), on=["pitcher"] + key, how="inner")
+    Sb["wd"] = Sb.d * Sb.n1; L = Sb.groupby(key)[["wd", "n1"]].sum()
+    own = Sb.set_index(["pitcher"] + key)[["wd", "n1"]]
+    lk = top.set_index(key).index; ok = top.set_index(["pitcher"] + key).index
+    lw = L.reindex(lk).to_numpy() - own.reindex(ok).to_numpy()                # leave this pitcher out
+    top["league"] = np.where(lw[:, 1] > 0, lw[:, 0] / np.maximum(lw[:, 1], 1), np.nan)
+    sg = np.sign(top.d); kept = top.d_out * sg; net = (top.d_out - top.league) * sg
+    rep = top.prev == top.typ
+    out[name] = dict(n=len(top), d_in=float(top.d.abs().mean()), d_out=float(kept.mean()), same_sign=float((kept > 0).mean()),
+                     net_out=float(net.mean()), net_same_sign=float((net > 0).mean()), league_mean=float((top.league * sg).mean()),
+                     d_out_repeat=float(kept[rep & (top.d > 0)].mean()), d_out_other=float(kept[~(rep & (top.d > 0))].mean()))
+    top["name"] = top.pitcher.map(df.groupby("pitcher").player_name.first())
+    top.to_csv(f"out/tells_{name}.csv", index=False); print(name, {k: round(v, 3) for k, v in out[name].items()})
 json.dump(out, open("out/tells_holdout.json", "w"), indent=1)
-# league repeat rate: P(same type as previous) versus what the count-and-hand mix alone implies
-d = df[df.season == 2025]
-rep = (d.x == d.prev).mean()
-exp = []
-for _, s in d.groupby(["pitcher", "count", "hand"]):
-    f = np.bincount(s.x, minlength=8) / len(s); exp.append((f[s.prev.to_numpy()]).sum())
-print("2025 repeat rate", round(rep, 4), "expected from count mix", round(sum(exp) / len(d), 4))

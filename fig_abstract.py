@@ -58,7 +58,7 @@ head(0.535, 0.955, "B", f"Every pitcher's top cue, held out (n = {len(t)})",
      f"found {xin.mean():.0f} pts, held out {xout.mean():.0f}; same sign {100*(xout>0).mean():.0f}% (no tell: 0, 50%)")
 
 # ---- D: stratified alarm
-M = pd.read_csv("out/monitor_audit_2025.csv"); P = json.load(open("out/monitor_audit_paths.json")); S = json.load(open("out/monitor_audit.json"))
+M = pd.read_csv("out/monitor_audit_2025.csv"); P = json.load(open("out/monitor_audit_paths.json")); S = json.load(open("out/monitor_audit.json")); SIM = json.load(open("out/monitor_sim.json"))
 e = fig.add_axes([0.085, 0.075, 0.895, 0.33])
 for nm, col in (("Brown, Hunter", ACC), ("Sale, Chris", ACC2), ("Skubal, Tarik", GRY)):
     r = M[M.name == nm].iloc[0]; p = P[str(int(r.pitcher))]; dd = pd.to_datetime(p["dates"]); y = np.array(p["strat"]) / np.log(10)
@@ -71,10 +71,10 @@ for nm, col in (("Brown, Hunter", ACC), ("Sale, Chris", ACC2), ("Skubal, Tarik",
     else:
         e.plot(dd, y, color=col, lw=1.8, label=f"{first}: never fired")
 e.axhline(np.log10(20), color=RED, lw=1.0, ls="--")
-e.text(pd.Timestamp("2025-09-29"), np.log10(20) + 0.25, "alarm: E = 20 (5% false-alarm level)", color=RED, fontsize=8.5, ha="right", va="bottom")
+e.text(pd.Timestamp("2025-09-29"), np.log10(20) + 0.25, "alarm: E = 20 threshold", color=RED, fontsize=8.5, ha="right", va="bottom")
 e.xaxis.set_major_locator(mdates.MonthLocator()); e.xaxis.set_major_formatter(mdates.DateFormatter("%b"))
 e.set_ylabel("evidence against no-cue null\n(log10 e-value)"); e.legend(frameon=False, loc="upper left")
 e.text(0.995, 0.21, f"Fired for {100*S['strat_real_fired']:.0f}% of 2025 pitchers (median {S['strat_real_median_pitches']:.0f} pitches)\n"
-       f"and {100*S['strat_ctrl_fired']:.0f}% of count-only shuffled controls", transform=e.transAxes, ha="right", va="bottom", fontsize=8.5, color=INK)
-head(0.0, 0.47, "C", "An in-season alarm with a 5% false-alarm level", "permutes pitch order within count and batter hand, game by game")
+       f"{100*S['strat_ctrl_fired']:.0f}% of cue-free controls, {100*SIM['rate']:.1f}% of endogenous-count simulations", transform=e.transAxes, ha="right", va="bottom", fontsize=8.5, color=INK)
+head(0.0, 0.47, "C", "An in-season alarm", "permutes pitch order within count and batter hand, game by game")
 fig.savefig("fig_abstract.pdf", bbox_inches="tight"); fig.savefig("fig_abstract.png", dpi=300, bbox_inches="tight")

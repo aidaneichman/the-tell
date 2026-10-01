@@ -1,10 +1,7 @@
-data/
+data/pitches_full.csv
+data/fetch.log
 out/pitch_probs.csv
-out/cost_bins.pkl
-out/zone_maps.npy
+paper_wip/
 __pycache__/
 *.log
 *.aux
-abstract_v1.tex
-paper.tex
-paper.pdf

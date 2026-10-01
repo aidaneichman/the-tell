@@ -13,6 +13,9 @@ for r in t.itertuples():
         n26=len(a), kept=np.sign(r.d) == np.sign((a.x == r.typ).mean() - (b.x == r.typ).mean())))
 T = pd.DataFrame(rows); T = T[T.n26 >= 25].head(10); T.to_csv("out/table_tells.csv", index=False); print(T.to_string())
 with open("table_tells.tex", "w") as f:
+    f.write("\\begin{tabular}{@{}lllccc@{}}\\toprule\n"
+            "Pitcher & Situation & Next pitch & Found 2025 & Held out 2026 & $n$ 2026 \\\\\\midrule\n")
     for r in T.itertuples(): f.write(f"{r.pitcher} & {r.situation} & {r.next} & ${r.d25:+d}$ & ${r.d26:+d}$ & {r.n26} \\\\\n")
+    f.write("\\bottomrule\n\\end{tabular}\n")
 sz = T.d25.abs(); kept = T.d26 * np.sign(T.d25)
 print("mean found", sz.mean(), "mean held out (same direction)", kept.mean())

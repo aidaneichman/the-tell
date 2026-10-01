@@ -1,10 +1,14 @@
 import numpy as np, pandas as pd
 CLS = {"FF":0,"FA":0,"SI":1,"FC":2,"SL":3,"ST":4,"SV":4,"CU":5,"KC":5,"CS":5,"CH":6,"FS":7,"FO":7}
 NAME = ["FF","SI","FC","SL","ST","CU","CH","FS"]
-import os
-DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "pitches_full.csv")
-def load(path=DATA, min_n=250):
-    df = pd.read_csv(path, on_bad_lines="skip", low_memory=False)
+import os, glob
+HERE = os.path.dirname(os.path.abspath(__file__))
+def read_snapshot():
+    files = sorted(glob.glob(os.path.join(HERE, "data", "statcast_20??.csv.gz")))
+    if not files: raise FileNotFoundError("data/statcast_YYYY.csv.gz missing; run fetch_full.py then snapshot.py")
+    return pd.concat([pd.read_csv(f, low_memory=False) for f in files], ignore_index=True)
+def load(min_n=250):
+    df = read_snapshot()
     df = df[df.game_date.astype(str).str.len() == 10].copy()
     df["season"] = df.game_date.str[:4].astype(int)
     df["x"] = df.pitch_type.map(CLS)

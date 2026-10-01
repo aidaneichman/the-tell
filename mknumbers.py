@@ -1,44 +1,30 @@
+"""Every number in abstract.tex, as LaTeX macros, read from the output files. Writes numbers.tex."""
 import numpy as np, pandas as pd, json
 out = []
 def put(k, v): out.append(f"\\newcommand{{\\{k}}}{{{v}}}")
 def com(x): return f"{int(round(x)):,}".replace(",", "{,}")
-T = pd.read_csv("out/tell_eb.csv"); R = json.load(open("out/reliability.json")); X = json.load(open("out/extra.json"))
-C = json.load(open("out/cost.json")); Z = json.load(open("out/abs_zone_abs.json")); ZD = json.load(open("out/abs_zone.json"))["dose"]
-M = pd.read_csv("out/monitor_2025.csv"); K = pd.read_csv("out/conditional_2025.csv")
-from common import load
-df = load()
-put("nPitches", com(len(df))); put("nPS", com(df.groupby(["pitcher", "season"]).ngroups))
-for y in (2024, 2025, 2026): put(f"nPS{['A','B','C'][y-2024]}", com((T.season == y).sum()))
+def sgn(x, f="{:+.2f}"): return f.format(x).replace("-", "$-$").replace("+", "$+$")
+T = pd.read_csv("out/tell.csv"); R = json.load(open("out/reliability.json")); X = json.load(open("out/extra.json"))
+C = json.load(open("out/cost.json")); Z = json.load(open("out/abs_zone_abs.json")); H = json.load(open("out/tells_holdout.json"))
+M = json.load(open("out/monitor_audit.json")); S = json.load(open("out/monitor_sim.json"))
+G = pd.read_csv("out/guess.csv"); TB = pd.read_csv("out/table_tells.csv")
+put("nPitches", com(T.n.sum())); put("nPS", com(len(T))); put("minN", "250")
 s = T[T.season == 2025]
-put("bitsH", f"{s.H.mean():.2f}"); put("bitsHand", f"{s.hand.mean():.3f}"); put("bitsCount", f"{s['count'].mean():.3f}")
-put("bitsTell", f"{s.tell.mean():.4f}"); put("mbTell", f"{1000*s.tell.mean():.1f}"); put("mbTellMed", f"{1000*s.tell.median():.1f}")
-put("tellShareH", f"{100*s.tell.mean()/s.H.mean():.1f}")
-put("tellTwoSE", f"{100*(T.tell > 2*T.tell_se).mean():.0f}")
-put("mbTau", f"{1000*R['eb_2025']['tau']:.1f}"); put("mbMu", f"{1000*R['eb_2025']['mu']:.1f}")
-put("relHalf", f"{R['split_indep_2025']['sb']:.2f}"); put("relHalfA", f"{R['split_indep_2024']['sb']:.2f}"); put("relHalfC", f"{R['split_indep_2026']['sb']:.2f}")
-put("yoyTell", f"{R['yoy_tell_2025_2026']['r']:.2f}"); put("yoyTellA", f"{R['yoy_tell_2024_2025']['r']:.2f}")
-put("yoyCount", f"{R['yoy_count_2025_2026']['r']:.2f}"); put("yoyHand", f"{R['yoy_hand_2025_2026']['r']:.2f}")
-put("corrTellRv", f"{X['corr_tell_rv_2025']:.2f}")
-L = s[s.n >= 1500].sort_values("eb"); top = L.tail(3)[::-1]; bot = L.head(3)
-fmt = lambda r: r["name"].split(",")[1].strip() + " " + r["name"].split(",")[0]
-put("topOne", fmt(top.iloc[0])); put("topTwo", fmt(top.iloc[1])); put("topThree", fmt(top.iloc[2]))
-put("botOne", fmt(bot.iloc[0])); put("botTwo", fmt(bot.iloc[1])); put("botThree", fmt(bot.iloc[2]))
-put("topOneEb", f"{1000*top.iloc[0].eb:.0f}")
-lo, hi = X["seqpred_p10_p90"]; span = hi - lo; put("spanBits", f"{span:.2f}")
-for k, nm, sc, fm in (("whiff_given_swing", "Whiff", 100, "{:.1f}"), ("rv", "Rv", 100, "{:.2f}"), ("xwoba_contact", "Xw", 1000, "{:.0f}"), ("swing", "Swing", 100, "{:.1f}")):
-    b, se = C[k]["beta"][0], C[k]["se"][0]
-    put(f"b{nm}", fm.format(b * sc)); put(f"t{nm}", f"{b/se:+.1f}"); put(f"eff{nm}", fm.format(abs(b * span * sc)))
-put("whiffBase", f"{100*C['whiff_given_swing']['ymean']:.1f}")
-put("nCost", com(C["rv"]["n"]))
-put("monFire", f"{100*M.fired.mean():.0f}"); put("monPitches", com(M.pitches_at_fire[M.fired].median())); put("monGame", f"{int(M.fire_game[M.fired].median())}")
-put("condRej", f"{100*(K.p_asym <= .05).mean():.0f}"); put("condLevel", f"{100*K.sim_level.mean():.1f}"); put("condLevelMax", f"{100*K.sim_level.max():.1f}")
-put("condE", f"{100*(K.loge >= np.log(20)).mean():.0f}"); put("nCond", com(len(K)))
+put("mbHand", f"{1000*s.hand.mean():.0f}"); put("mbCount", f"{1000*s['count'].mean():.0f}"); put("mbTell", f"{1000*s.tell.mean():.1f}")
+g = G[G.season == 2025]; put("guessGain", f"{100*g.gain.mean():.1f}")
+gt = g[g.n >= 1500].nlargest(1, "gain").iloc[0]; put("guessTopName", gt["name"].split(", ")[1] + " " + gt["name"].split(",")[0]); put("guessTopGain", f"{100*gt.gain:.0f}")
+h = H["2025H1_2025H2"]; put("hoIn", f"{100*h['d_in']:.0f}"); put("hoOut", f"{100*h['d_out']:.0f}"); put("hoSign", f"{100*h['same_sign']:.0f}")
+put("hoNet", f"{100*h['net_out']:.0f}"); put("hoNetSign", f"{100*h['net_same_sign']:.0f}"); put("hoN", f"{h['n']}")
+put("tabIn", f"{TB.d25.abs().mean():.0f}"); put("tabOut", f"{(TB.d26*np.sign(TB.d25)).mean():.0f}"); put("tabKept", f"{int(TB.kept.sum())}"); put("tabN", f"{len(TB)}")
+put("relHalf", f"{R['split_indep_2025']['sb']:.2f}"); put("yoyTell", f"{R['yoy_tell_2025_2026']['r']:.2f}"); put("yoyCount", f"{R['yoy_count_2025_2026']['r']:.2f}")
+sp = C["span"]
+for tag, suf in (("base", ""), ("prevout", "Po")):
+    for k, nm, sc, fm in (("whiff_given_swing", "Whiff", 100, "{:.1f}"), ("rv", "Rv", 100, "{:.2f}")):
+        b, se = C[tag][k]["beta"][0], C[tag][k]["se"][0]
+        put(f"eff{nm}{suf}", fm.format(b * sp * sc)); put(f"t{nm}{suf}", f"{b/se:.1f}")
+put("almFire", f"{100*M['strat_real_fired']:.0f}"); put("almMed", com(M["strat_real_median_pitches"]))
+put("almCtrl", f"{100*M['strat_ctrl_fired']:.0f}"); put("almSim", f"{100*S['rate']:.1f}"); put("almOrigCtrl", f"{100*M['orig_ctrl_fired']:.0f}")
+put("topAbs", f"{12*(Z['2025']['top_ft']-Z['2026']['top_ft']):.1f}"); put("topPlac", f"{12*(Z['2024']['top_ft']-Z['2025']['top_ft']):.1f}")
 for a, b, t in ((2024, 2025, "Plac"), (2025, 2026, "Abs")):
-    put(f"top{t}", f"{12*(Z[str(b)]['top_ft']-Z[str(a)]['top_ft']):+.1f}"); put(f"bot{t}", f"{12*(Z[str(b)]['bot_ft']-Z[str(a)]['bot_ft']):+.1f}")
-    put(f"side{t}", f"{12*(Z[str(b)]['side_ft']-Z[str(a)]['side_ft']):+.1f}"); put(f"area{t}", f"{100*(Z[str(b)]['area_ft2']/Z[str(a)]['area_ft2']-1):+.0f}")
-    r = X[f"tell_{a}_{b}"]; put(f"tell{t}Diff", f"{1000*r['diff']:+.2f}"); put(f"tell{t}Lo", f"{1000*r['lo']:+.2f}"); put(f"tell{t}Hi", f"{1000*r['hi']:+.2f}"); put(f"tell{t}N", com(r["n"]))
-    put(f"tell{t}Base", f"{1000*r['base']:.1f}")
-put("szTopA", f"{df[df.season==2025].sz_top.mean():.2f}"); put("szTopB", f"{df[df.season==2026].sz_top.mean():.2f}")
-put("szSdA", f"{df[df.season==2025].sz_top.std():.2f}"); put("szSdB", f"{df[df.season==2026].sz_top.std():.2f}")
-put("doseSlope", f"{1000*ZD['slope']:+.2f}"); put("doseSE", f"{1000*ZD['se']:.1f}"); put("doseN", com(ZD["n"])); put("edgeMean", f"{100*ZD['edge_mean']:.0f}")
+    r = X[f"tell_{a}_{b}"]; put(f"tell{t}Diff", sgn(1000*r["diff"])); put(f"tell{t}Lo", sgn(1000*r["lo"])); put(f"tell{t}Hi", sgn(1000*r["hi"]))
 open("numbers.tex", "w").write("\n".join(out) + "\n"); print("\n".join(out))
